@@ -1,0 +1,40 @@
+open Graphics;;
+
+let rec  screen_niveau () =     Graphics.set_font "-*-fixed-medium-r-*--24-*-*-*-*-*-iso8859-1";
+    let level = ["Facile";"Moyen"; "Difficile"] in
+  for i = 0 to (List.length level)-1 do
+      create_button (130+i*200) 500 180 80 black white (List.nth level i) (170+i*200) 530
+  done;
+  Graphics.set_font "-*-fixed-medium-r-*--24-*-*-*-*-*-iso8859-1";
+  create_button 548 103 154 54 black white "Retour" 585 120;
+  Graphics.set_font "-*-fixed-medium-r-*--17-*-*-*-*-*-iso8859-1";
+  set_color black;
+  let e = wait_next_event [Button_down ] in
+  if e.button then (
+    if e.mouse_x>130 && e.mouse_x <310 &&  e.mouse_y>500 && e.mouse_y<580 then
+      (
+        moveto 160 330 ;
+        draw_string ("Niveau Facile : Le nombre de retour arriere");
+        moveto 160 310 ;
+        draw_string ("et d'aide est illimite! Ideal pour s'echauffer!");
+      )else if e.mouse_x>330 && e.mouse_x <510 &&  e.mouse_y>500 && e.mouse_y<580 then
+      (
+        
+        moveto 160 330 ;
+        draw_string ("Niveau Moyen : Le nombre de retour arriere");
+        moveto 160 310 ;
+        draw_string ("et d'aide est limité à 5!");
+      ) else  if e.mouse_x>530 && e.mouse_x <710 &&  e.mouse_y>500 && e.mouse_y<580 then
+      (
+        
+        moveto 160 330 ;
+        draw_string ("Niveau Difficile : Le retour arriere et l'aide");
+        moveto 160 310 ;
+        draw_string ("est impossible! Pret à pleurer?");
+      ) else  if e.mouse_x>548 && e.mouse_x <700 &&  e.mouse_y>103 && e.mouse_y<160 then
+        (
+          clear_graph ();
+          screen_menu descr;
+        )
+    else screen_niveau ();
+  ) ;;

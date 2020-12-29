@@ -1,0 +1,64 @@
+
+(*** conversion txt en array***)
+let txt_2_array entree =
+  Array.map (function x -> int_of_string x) (Array.map (function x -> Char.escaped x)(Array.init 81 (fun t -> entree.[t])))
+;;
+
+(*** conversion array en array2d***)
+let array_to_array2d array1d = 
+  let dim = int_of_float (sqrt (float (Array.length array1d))) in
+  Array.init dim (fun i -> Array.init dim (fun j -> array1d.(i * dim + j)))
+;;
+
+(***conversion array2d en array***)
+let array2d_to_array array2d =
+  let array1d =  Array.make 81 0 in 
+  for i = 0 to 8 do
+    for j = 0 to 8 do
+      array1d.(9*j+i) <- array2d.(j).(i)
+    done;
+  done;
+  array1d
+;;
+
+(***conversion array en string***)
+let string_of_array f a =
+  let s = Array.fold_left (fun s e -> s^(f e)) "" a in
+  s
+;;
+
+let string_of_array2 a =
+  let s = Array.fold_left (fun s e -> s^e^";") "" a in
+  s
+;;
+
+let color_2_string c =
+  if c=cyan then "cyan"
+  else if c=yellow then "yellow"
+  else if c=red then "red"
+  else if c=black then "black"
+  else if c=magenta then "magenta"
+  else if c=(rgb 220 220 220) then "(rgb 220 220 220)"
+  else "white"
+
+;;
+
+(*** enregistrement string en txt***)
+let string_2_txt descr =
+  if (Sys.file_exists "./sauvegardes") <> true then Unix.mkdir "sauvegardes" 0o777;
+  let oc = open_out ("sauvegardes/sauvegarde"^descr.name) in
+  fprintf oc "%s\n" (string_of_array string_of_int (array2d_to_array  descr.modifiedGrid )) ;
+  for i = 0 to 8 do
+    fprintf oc "%s" (string_of_array2 (Array.map (fun a -> color_2_string a)  descr.colorGrid.(i)) )  ;
+  done;
+  let rec convert_tuples =
+    function
+    | [] -> ""
+    | (a, b, c) :: rest -> "(" ^string_of_int a^ "," ^string_of_int b^ "," ^string_of_int c^ ");"^convert_tuples rest in 
+  fprintf oc "\n%s\n" (convert_tuples  descr.backtrack)  ;
+
+let (a,b,c) = descr.level in 
+  
+    fprintf oc "(%s,%s,%s)" (string_of_int a) (string_of_int b) (string_of_int c)  ;
+  close_out oc;  
+;;

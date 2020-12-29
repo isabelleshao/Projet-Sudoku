@@ -1,0 +1,2 @@
+open Textarea;;
+ create_component;;

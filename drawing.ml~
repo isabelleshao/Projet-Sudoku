@@ -1,0 +1,22 @@
+open Graphics;;
+
+
+let draw_empty_screen () =
+  clear_graph ();
+  set_color (rgb 230 230 230) ;
+  fill_rect 0 0 800 800 ;
+  Graphics.set_font "-*-fixed-medium-r-*--16-*-*-*-*-*-iso8859-1";
+  draw_image (Ig.init_image "sudoku.ppm") 100 614;
+  set_color black ;  
+;;
+
+let create_button x y w h bg c s mx my =
+  set_color c;
+  fill_rect (x-2) (y-2) (w+4) (h+4);
+  set_color bg; 
+  fill_rect x y w h;
+  set_color c;
+  moveto mx my ;
+  draw_string s
+;;
+
